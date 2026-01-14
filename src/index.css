@@ -8,5 +8,9 @@
 
 @theme {
     --color-primary: oklch(54.6% 0.245 262.881);
-    --color-secondary: oklch(25.7% 0.09 281.288)
+    --color-secondary: oklch(25.7% 0.09 281.288);
+    --shadow-input:
+        0px 2px 3px -1px rgba(0, 0, 0, 0.1),
+        0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+        0px 0px 0px 1px rgba(25, 28, 33, 0.08);
 }
