@@ -1,29 +1,29 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Button from "./ui/Button"
 import { Logs, X } from "lucide-react"
 import { useState } from "react"
 
 
+const links: NavLink[] = [
+    {
+        title: 'About',
+        href: '#'
+    },
+    {
+        title: 'Pricing',
+        href: '#'
+    },
+    {
+        title: 'Testimonials',
+        href: '#'
+    }
+]
 interface NavLink {
     title: string,
     href: string
 }
 const Navbar = () => {
-
-    const links: NavLink[] = [
-        {
-            title: 'About',
-            href: '#'
-        },
-        {
-            title: 'Pricing',
-            href: '#'
-        },
-        {
-            title: 'Testimonials',
-            href: '#'
-        }
-    ]
+    const navigate = useNavigate()
 
     const [mobileNavOpen, setMobileNavOpen] = useState<false | true>(false)
     return (
@@ -43,7 +43,9 @@ const Navbar = () => {
                     ))}
                 </div>
                 <div className="hidden sm:block">
-                    <Button className="text-sm">Login</Button>
+                    <Button
+                        onClick={() => navigate('/login')}
+                        className="text-sm">Login</Button>
                 </div>
 
                 <div className="sm:hidden">

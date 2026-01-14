@@ -4,6 +4,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import IndexLayout from './layouts/IndexLayout.tsx'
 import LandingPage from './pages/LandingPage.tsx'
+import Login from './pages/auth/Login.tsx'
 const router = createBrowserRouter([
   {
     path: "",
@@ -11,7 +12,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <LandingPage/>
+        element: <LandingPage />
+      },
+      {
+        path: '/login',
+        element: <Login />
       }
     ]
   }

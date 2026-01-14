@@ -1,17 +1,23 @@
-import { cn } from "../../lib/utils.ts"
+import { cn } from "../../lib/utils";
 
-const Button = ({ children, className }: {
-    children: React.ReactNode,
-    className?: string
-}) => {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    className?: string;
+};
+
+const Button = ({ children, className, ...props }: ButtonProps) => {
     return (
-        <div className={cn('outline-none bg-primary px-8 py-2 rounded-full text-white font-semibold text-center ',
-            'transition-all duration-100 ease-linear cursor-pointer',
-            ' hover:scale-105 hover:-translate-y-0.5 active:scale-90',
-            className)}>
+        <button
+            {...props}
+            className={cn(
+                "outline-none bg-primary px-8 py-2 rounded-full text-white font-semibold text-center",
+                "transition-all duration-100 ease-linear cursor-pointer",
+                "hover:scale-105 hover:-translate-y-0.5 active:scale-90",
+                className
+            )}
+        >
             {children}
-        </div>
-    )
-}
+        </button>
+    );
+};
 
-export default Button
+export default Button;

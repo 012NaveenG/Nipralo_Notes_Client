@@ -1,7 +1,9 @@
 import { Star } from "lucide-react"
 import Button from "../components/ui/Button"
+import { useNavigate } from "react-router-dom"
 
 const LandingPage = () => {
+    const navigate = useNavigate()
     return (
         <div className="w-full sm:max-w-6xl  sm:mx-auto py-20 flex items-center justify-center">
             <div className="">
@@ -10,7 +12,13 @@ const LandingPage = () => {
                 <h1 className="text-4xl max-w-lg text-center text-secondary py-5">Bring Big Ideas To Life Without The <span className="text-primary font-medium italic">Tech Headache</span></h1>
                 <p className="max-w-lg text-center font-medium text-blue-900">Your all-in-one Product Team, Turning Vision into Live, Launch ready product</p>
 
-                <Button className="w-52 py-3 mt-10 mx-auto border-4 border-sky-300 text-shadow-2xs shadow-2xl shadow-blue-400 text-shadow-sky-200">Get Started</Button>
+                <div className="flex items-center justify-center">
+                    <Button
+                        onClick={() => navigate('/login')}
+
+                        className=" py-3  mt-10  border-4 border-sky-300 text-shadow-2xs shadow-2xl shadow-blue-400 text-shadow-sky-200">Get Started
+                    </Button>
+                </div>
             </div>
         </div>
     )
