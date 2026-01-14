@@ -5,3 +5,8 @@
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
 }
+
+@theme {
+    --color-primary: oklch(54.6% 0.245 262.881);
+    --color-secondary: oklch(25.7% 0.09 281.288)
+}
