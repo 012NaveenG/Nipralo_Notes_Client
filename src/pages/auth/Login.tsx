@@ -9,40 +9,39 @@ import { Label } from "../../components/ui/Label.tsx"
 import { useState, type FormEvent } from "react"
 import Loader from "../../components/ui/Loader.tsx"
 import toast from "react-hot-toast"
+import type { LoginForm } from "../../types/user.types.ts"
+import { loginUser } from "../../api/user.api.ts"
 
 
-interface Form {
-  username: string;
-  password: string
-}
+
 const Login = () => {
 
-  const [form, setForm] = useState<Form>({
-    username: "",
+  const [form, setForm] = useState<LoginForm>({
+    email: "",
     password: ""
   })
   const [loading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
     try {
-      setLoading(true)
-      console.log(form)
-      setLoading(false)
-      toast.success('Welcome Back')
-      navigate('/')
-    } catch (error) {
-      console.log(error)
+      const data = await loginUser(form);
+
+      toast.success(data.message);
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
   return (
     <div className="w-full sm:max-w-4xl  sm:mx-auto py-15 flex items-center justify-center">
       <div className="grid grid-cols-1 sm:grid-cols-2 divide-x-2 gap-2 divide-neutral-300  shadow-input p-5 rounded-lg h-full w-full">
-        <div className="hidden sm:block">
+        <div className="hidden sm:flex items-center justify-center">
           <img src="/auth_logo.webp" alt="Auth_logo" className="size-72 mx-auto" />
         </div>
         <form
@@ -55,12 +54,12 @@ const Login = () => {
               <FormDescription className="text-center">Please login to access notes</FormDescription>
             </FormHeader>
             <Group>
-              <Label>Username</Label>
+              <Label>Email</Label>
               <Input
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-                type='text'
-                placeholder="Enter username"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                type='email'
+                placeholder="Enter your email"
                 required
               />
             </Group>
@@ -85,7 +84,7 @@ const Login = () => {
             <p className="text-center font-medium text-neutral-700 my-2">or</p>
             <Link
               to={'/register'}
-              className="text-primary font-medium text-sm flex items-center justify-center"
+              className="text-primary font-medium text-sm flex items-center justify-center hover:text-blue-800 transition-all duration-150 ease-linear"
             >Not having an account. Register?</Link>
 
 
