@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Button from "./ui/Button"
 import { Logs, X } from "lucide-react"
 import { useState } from "react"
@@ -24,6 +24,7 @@ interface NavLink {
 }
 const Navbar = () => {
     const navigate = useNavigate()
+    const url = useLocation()
 
     const [mobileNavOpen, setMobileNavOpen] = useState<false | true>(false)
     return (
@@ -43,9 +44,13 @@ const Navbar = () => {
                     ))}
                 </div>
                 <div className="hidden sm:block">
-                    <Button
-                        onClick={() => navigate('/login')}
-                        className="text-sm">Login</Button>
+                    {url.pathname === '/login' || url.pathname === '/register' ? ''
+                        : <Button
+                            onClick={() => navigate('/login')}
+                            className="text-sm">
+                            Login
+                        </Button>}
+
                 </div>
 
                 <div className="sm:hidden">
@@ -59,7 +64,7 @@ const Navbar = () => {
                             onClick={() => setMobileNavOpen((prev) => !prev)} />
                     }
                 </div>
-                {mobileNavOpen && <MobileNavTray />}
+                {mobileNavOpen && <MobileNavTray setMobileNavOpen={setMobileNavOpen} />}
             </nav>
         </header>
     )
@@ -67,31 +72,38 @@ const Navbar = () => {
 
 export default Navbar
 
-const MobileNavTray = () => {
-    const links: NavLink[] = [
-        {
-            title: 'About',
-            href: '#'
-        },
-        {
-            title: 'Pricing',
-            href: '#'
-        },
-        {
-            title: 'Testimonials',
-            href: '#'
-        }
-    ]
+const MobileNavTray = ({ setMobileNavOpen }: {
+    setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>
+
+}) => {
+
+    const navigate = useNavigate()
+    const url = useLocation()
     return (
         <div className="absolute  sm:hidden flex flex-col top-10 -left-4 p-2  w-screen  bg-neutral-100 shadow-input transition-all duration-150 ease-linear">
             {links.map((link) => (
                 <Link
                     key={link.title}
                     className="text-xl font-medium my-2 text-neutral-700"
-                    to={'#'}>
+                    to={'#'}
+                    onClick={() => setMobileNavOpen((prev: boolean) => !prev)}
+                >
                     {link.title}
                 </Link>
             ))}
+
+            <div className="w-full">
+                {url.pathname === '/login' || url.pathname === '/register' ? ''
+                    : <Button
+                        onClick={() => {
+                            navigate('/login')
+                            setMobileNavOpen((prev: boolean) => !prev)
+                        }}
+                        className="text-sm w-full">
+                        Login
+                    </Button>}
+
+            </div>
 
         </div>
     )
