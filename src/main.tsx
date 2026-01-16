@@ -9,6 +9,7 @@ import Register from './pages/auth/Register.tsx'
 import AppLayout from './layouts/AppLayout.tsx'
 import Index from './pages/app/Index.tsx'
 import SharedNotes from './pages/app/SharedNotes.tsx'
+import NoteById from './pages/app/NoteById.tsx'
 const router = createBrowserRouter([
   {
     path: "",
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Index />
+      },
+      {
+        path: '/app/note/:noteId',
+        element: <NoteById />
       },
       {
         path: '/app/shared-notes',

@@ -1,11 +1,11 @@
 
 interface Note {
-    id: number;
+    id?: number;
     title: string;
     content: string;
-    createdBy: number;
-    createdAt: string;   // ISO timestamp from backend
-    updatedAt: string;   // ISO timestamp from backend
+    createdBy?: number;
+    createdAt?: string;   // ISO timestamp from backend
+    updatedAt?: string;   // ISO timestamp from backend
 }
 
 

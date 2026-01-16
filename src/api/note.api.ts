@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import type { Note } from "../types/note.types";
 
 interface ApiResponse<T> {
@@ -15,4 +15,12 @@ const fetchNoteByUserId = async (): Promise<Note[]> => {
     return response.data.data; // <-- IMPORTANT
 };
 
-export { fetchNoteByUserId };
+const fetchNoteByNoteId = async (noteId: string): Promise<Note> => {
+    const response = await axios.get<ApiResponse<Note>>(
+        `/api/v1/notes/get-note/${noteId}`
+    );
+
+    return response.data.data;
+};
+
+export { fetchNoteByUserId, fetchNoteByNoteId };
