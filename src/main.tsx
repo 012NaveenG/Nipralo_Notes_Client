@@ -6,6 +6,9 @@ import IndexLayout from './layouts/IndexLayout.tsx'
 import LandingPage from './pages/LandingPage.tsx'
 import Login from './pages/auth/Login.tsx'
 import Register from './pages/auth/Register.tsx'
+import AppLayout from './layouts/AppLayout.tsx'
+import Index from './pages/app/Index.tsx'
+import SharedNotes from './pages/app/SharedNotes.tsx'
 const router = createBrowserRouter([
   {
     path: "",
@@ -23,6 +26,20 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register />
       }
+    ]
+  },
+  {
+    path: "/app",
+    element: <AppLayout />,
+    children: [
+      {
+        path: '',
+        element: <Index />
+      },
+      {
+        path: '/app/shared-notes',
+        element: <SharedNotes />
+      },
     ]
   }
 ])
