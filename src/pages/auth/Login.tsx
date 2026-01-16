@@ -30,7 +30,7 @@ const Login = () => {
       const data = await loginUser(form);
 
       toast.success(data.message);
-      navigate("/");
+      navigate("/app");
     } catch (error: any) {
       toast.error(error.message);
     } finally {

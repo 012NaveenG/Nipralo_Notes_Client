@@ -33,7 +33,7 @@ const Register = () => {
         try {
             const data = await registerUser(form);
             toast.success(data.message);
-            navigate("/");
+            navigate("/login");
         } catch (error: any) {
             toast.error(error.message);
         } finally {
