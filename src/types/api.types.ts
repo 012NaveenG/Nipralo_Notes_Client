@@ -1,9 +1,13 @@
+type AuthUser = {
+    id: number;
+    name: string;
+};
+
 type AuthApiResponse = {
     statusCode: number;
     message: string;
-    data?: {
-        user?: any;
-    };
+    data: AuthUser; // NOT optional
 };
+
 
 export { type AuthApiResponse }

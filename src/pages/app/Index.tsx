@@ -10,9 +10,11 @@ import { Label } from "../../components/ui/Label"
 import { cn } from "../../lib/utils"
 import { Link } from "react-router-dom"
 import type { Note } from "../../types/note.types"
-import { createNote, fetchNoteByUserId } from "../../api/note.api"
+import { createNote, deleteNote, fetchNoteByUserId } from "../../api/note.api"
 import toast from "react-hot-toast"
 import Loader from "../../components/ui/Loader"
+import { Trash2 } from "lucide-react"
+import type { AxiosError } from "axios"
 
 interface NoteForm {
     title: string;
@@ -42,6 +44,18 @@ const Index = () => {
         loadNotes();
     }, [setOpenModal]);
 
+    const handleDelete = async (id?: number) => {
+        if (typeof id !== "number") return;
+        try {
+
+            const res = await deleteNote(id)
+            setNotes((prev) => prev.filter((item) => item.id !== id))
+            toast.success(res)
+        } catch (error) {
+            const err = error as AxiosError<any>
+            toast.error(err.response?.data?.message || "Delete Note failed")
+        }
+    }
 
     return (
         <div className={`p-4 w-full  relative `}>
@@ -54,26 +68,35 @@ const Index = () => {
                 </Button>
             </div>
             {loading ? (
-                <div className="grid grid-cols-3 gap-5 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <NoteCardSkeleton key={i} />
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-3 gap-5 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
                     {notes.length > 0 ? notes.map((note) => (
                         <NoteCard
                             key={note.id}
                             className="relative group">
                             <Title>{note.title}</Title>
-                            <Description>{note.content}</Description>
+                            <Description className="h-20 overflow-y-hidden">{note.content}</Description>
 
-                            <Link
-                                to={`/app/note/${note.id}`}
-                                className="hidden  absolute group-hover:flex items-center justify-center bg-gray-50 opacity-80  h-full w-full top-0 left-0 transition-all duration-300 ease-linear font-semibold"
-                            >
-                                View
-                            </Link>
+                            <div className="flex items-center justify-end gap-2">
+                                <Link
+                                    to={`/app/note/${note.id}`}
+                                    className="flex items-center justify-center bg-gray-50 opacity-80  transition-all duration-300 ease-linear font-semibold border rounded-full px-2 py-1 text-xs hover:bg-neutral-400 hover:text-primary"
+                                >
+                                    View
+                                </Link>
+
+                                <Button
+                                    onClick={() => handleDelete(note.id)}
+                                    className="size-8 float-end bg-red-600 flex items-center justify-center hover:bg-red-700 text-xs p-1"
+                                >
+                                    <Trash2 size={15} />
+                                </Button>
+                            </div>
                         </NoteCard>
                     )) : <p className="text center font-semibold">No Note Found</p>}
 

@@ -2,19 +2,23 @@ import { useParams } from "react-router-dom";
 import { Group } from "../../components/ui/Group.tsx";
 import { Input } from "../../components/ui/Input.tsx";
 import Textarea from "../../components/ui/Textarea.tsx";
-import { useEffect, useState, type FormEvent } from "react";
-import { addCollaborator, fetchNoteByNoteId } from "../../api/note.api.ts";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { addCollaborator, fetchNoteByNoteId, updateNote } from "../../api/note.api.ts";
 import type { CollaboratorForm, Note } from "../../types/note.types.ts";
 import toast from "react-hot-toast";
-import { connectSocket } from "../../socketio.ts";
 import { Plus } from "lucide-react";
 import Button from "../../components/ui/Button.tsx";
 import Loader from "../../components/ui/Loader.tsx";
 import { Label } from "../../components/ui/Label.tsx";
 import FormHeader from "../../components/ui/FormHeader.tsx";
 import FormTitle from "../../components/ui/FormTitle.tsx";
+import { debounce } from "../../utils/debounce.ts";
+import { useAuth } from "../../store/user.store.tsx";
+import { useSocket } from "../../socket/useSocket.ts";
 
 const NoteById = () => {
+    const { user } = useAuth();
+    const { socket, connectedUsers } = useSocket();
     const { noteId } = useParams<{ noteId: string }>();
     const [noteData, setNoteData] = useState<Note | null>(null);
     const [loading, setLoading] = useState(true);
@@ -22,7 +26,6 @@ const NoteById = () => {
 
     useEffect(() => {
         if (!noteId) return;
-        connectSocket()
 
         const loadNoteData = async () => {
             try {
@@ -39,11 +42,61 @@ const NoteById = () => {
         loadNoteData();
     }, [noteId]);
 
+    /* ================= SOCKET JOIN / LEAVE ================= */
+    useEffect(() => {
+        if (!socket || !noteId || !user) return;
+
+        const join = () => {
+            socket.emit("note:join", { noteId, user });
+        };
+
+        socket.connected ? join() : socket.once("connect", join);
+
+        socket.on("note:update", (updatedNote: Note) => {
+            setNoteData(updatedNote);
+        });
+
+        return () => {
+            socket.emit("note:leave", { noteId });
+            socket.off("note:update");
+        };
+    }, [socket, noteId, user]);
+
+    /* ================= DEBOUNCED SAVE ================= */
+    const debouncedSave = useRef(
+        debounce(async (note: Note,) => {
+            try {
+                await updateNote({
+                    id: Number(noteId),
+                    title: note.title,
+                    content: note.content,
+                });
+            } catch {
+                toast.error("Auto-save failed");
+            }
+        }, 500)
+    ).current;
+
+    /* ================= HANDLE CHANGE ================= */
+    const handleChange = (field: "title" | "content", value: string) => {
+        setNoteData((prev) => {
+            if (!prev) return prev;
+            const updated = { ...prev, [field]: value };
+            debouncedSave(updated);
+            return updated;
+        });
+    };
+
+    /* ================= UI ================= */
+    if (loading) return <NoteEditorSkeleton />;
+    if (!noteData) return <p className="text-center">Note not found</p>;
 
     return (
         <div className="relative w-full h-full shadow-input p-10">
-            <div className="max-w-2xl mx-auto flex items-center justify-end gap-1">
-                <Avatar />
+            <div className="max-w-xl sm:max-w-2xl mx-auto flex items-center justify-end gap-1">
+                {connectedUsers.map((u) => (
+                    <Avatar key={u.id} username={u.name} />
+                ))}
                 <button
                     onClick={() => setOpenModal((prev) => !prev)}
                     className="size-8 bg-neutral-200 text-primary  rounded-full flex items-center justify-center cursor-pointer hover:bg-neutral-300 active:scale-80 transition-all duration-200 ease-linear"
@@ -55,16 +108,12 @@ const NoteById = () => {
             {
                 loading ? <NoteEditorSkeleton />
                     : (
-                        noteData ? <form className="max-w-2xl mx-auto ">
+                        noteData ? <form className="max-w-xl sm:max-w-2xl mx-auto ">
 
                             <Group>
                                 <Input
                                     value={noteData?.title}
-                                    onChange={(e) => {
-                                        setNoteData(prev =>
-                                            prev ? { ...prev, title: e.target.value } : prev
-                                        );
-                                    }}
+                                    onChange={(e) => handleChange('title', e.target.value)}
 
                                 />
                             </Group>
@@ -72,11 +121,7 @@ const NoteById = () => {
                                 <Textarea
                                     rows={10}
                                     value={noteData?.content}
-                                    onChange={(e) => {
-                                        setNoteData(prev =>
-                                            prev ? { ...prev, content: e.target.value } : prev
-                                        );
-                                    }}
+                                    onChange={(e) => handleChange('content', e.target.value)}
                                 />
                             </Group>
 
@@ -101,13 +146,11 @@ const NoteById = () => {
 export default NoteById;
 
 
-const Avatar = () => {
-    return (
-        <div className="size-8 bg-pink-300 rounded-full p-2 flex items-center justify-center border-4 border-gray-200">
-            N
-        </div>
-    )
-}
+const Avatar = ({ username }: { username: string }) => (
+    <div className="size-8 bg-pink-300 rounded-full flex items-center justify-center border-4 border-gray-200">
+        {username[0]}
+    </div>
+);
 
 
 const AddColaboratorFormModal = ({ openModal, setOpenModal, noteId }: {
@@ -128,7 +171,7 @@ const AddColaboratorFormModal = ({ openModal, setOpenModal, noteId }: {
 
         try {
             setLoading(true)
-            const response = await addCollaborator(form); 
+            const response = await addCollaborator(form);
             toast.success(response);
             setLoading(false)
             setOpenModal((prev) => !prev)

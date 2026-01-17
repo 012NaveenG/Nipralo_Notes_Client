@@ -11,6 +11,7 @@ import Index from './pages/app/Index.tsx'
 import SharedNotes from './pages/app/SharedNotes.tsx'
 import NoteById from './pages/app/NoteById.tsx'
 import SharedNoteById from './pages/app/SharedNoteById.tsx'
+import { AuthProvider } from './store/user.store.tsx'
 const router = createBrowserRouter([
   {
     path: "",
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
     ]
   }
 ])
+
+
 createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router} ></RouterProvider>
+  <AuthProvider>
+    <RouterProvider router={router} ></RouterProvider>
+  </AuthProvider>
 )

@@ -11,11 +11,13 @@ import Loader from "../../components/ui/Loader.tsx"
 import toast from "react-hot-toast"
 import type { LoginForm } from "../../types/user.types.ts"
 import { loginUser } from "../../api/user.api.ts"
+import { useAuth } from "../../store/user.store.tsx"
 
 
 
 const Login = () => {
 
+  const { setUser } = useAuth()
   const [form, setForm] = useState<LoginForm>({
     email: "",
     password: ""
@@ -25,10 +27,12 @@ const Login = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const data = await loginUser(form);
-
+      setUser({
+        id: data.data.id,
+        name: data.data.name,
+      });
       toast.success(data.message);
       navigate("/app");
     } catch (error: any) {

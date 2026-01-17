@@ -50,4 +50,23 @@ const fetchSharedNotes = async (): Promise<Note[]> => {
 
     return response.data.data; // <-- IMPORTANT
 };
-export { fetchNoteByUserId, fetchNoteByNoteId, createNote, addCollaborator, fetchSharedNotes };
+const updateNote = async (
+    payload: {
+        id: number;
+        title: string;
+        content: string
+    }
+): Promise<Note> => {
+    const response = await axios.put(`/api/v1/notes/`, payload);
+
+    return response.data.data;
+};
+
+const deleteNote = async (id: number): Promise<string> => {
+    const response = await axios.delete(`/api/v1/notes/${id}`);
+    return response.data?.message
+
+
+}
+
+export { fetchNoteByUserId, fetchNoteByNoteId, createNote, addCollaborator, fetchSharedNotes, updateNote, deleteNote };

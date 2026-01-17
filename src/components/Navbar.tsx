@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Button from "./ui/Button"
 import { Logs, X } from "lucide-react"
 import { useState } from "react"
+import { useAuth } from "../store/user.store"
 
 
 const links: NavLink[] = [
@@ -24,7 +25,8 @@ interface NavLink {
 }
 const Navbar = () => {
     const navigate = useNavigate()
-    const url = useLocation()
+    const { user, logout } = useAuth()
+
 
     const [mobileNavOpen, setMobileNavOpen] = useState<false | true>(false)
     return (
@@ -44,7 +46,15 @@ const Navbar = () => {
                     ))}
                 </div>
                 <div className="hidden sm:block">
-                    {url.pathname === '/login' || url.pathname === '/register' ? ''
+                    {user ?
+                        <Button
+                            onClick={() => {
+                                navigate('/')
+                                logout()
+                            }}
+                            className="text-sm bg-red-400">
+                            Logout
+                        </Button>
                         : <Button
                             onClick={() => navigate('/login')}
                             className="text-sm">
