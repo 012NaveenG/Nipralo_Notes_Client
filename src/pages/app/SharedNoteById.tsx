@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchNoteByNoteId, updateNote } from "../../api/note.api.ts";
 import type { Note } from "../../types/note.types.ts";
 import toast from "react-hot-toast";
-import { useAuth } from "../../store/user.store.ts";
+import { useAuth } from "../../store/user.store.tsx";
 import { useSocket } from "../../socket/useSocket.ts";
 import { debounce } from "../../utils/debounce.ts";
 
