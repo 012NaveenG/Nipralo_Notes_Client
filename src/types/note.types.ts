@@ -8,5 +8,8 @@ interface Note {
     updatedAt?: string;   // ISO timestamp from backend
 }
 
-
-export { type Note }
+interface CollaboratorForm {
+    email: string;
+    noteId: number
+}
+export type { Note, CollaboratorForm }

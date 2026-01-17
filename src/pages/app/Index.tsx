@@ -10,8 +10,9 @@ import { Label } from "../../components/ui/Label"
 import { cn } from "../../lib/utils"
 import { Link } from "react-router-dom"
 import type { Note } from "../../types/note.types"
-import { fetchNoteByUserId } from "../../api/note.api"
+import { createNote, fetchNoteByUserId } from "../../api/note.api"
 import toast from "react-hot-toast"
+import Loader from "../../components/ui/Loader"
 
 interface NoteForm {
     title: string;
@@ -39,10 +40,9 @@ const Index = () => {
         };
 
         loadNotes();
-    }, []);
+    }, [setOpenModal]);
 
 
-    console.log(notes)
     return (
         <div className={`p-4 w-full  relative `}>
             <div className="  flex items-center justify-end pr-20">
@@ -156,15 +156,24 @@ const NoteModal = ({ openModal, setOpenModal }: {
         title: "",
         content: ""
     })
+    const [loading, setLoading] = useState<boolean>(false)
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         try {
-            e.preventDefault()
-            console.log(form)
-        } catch (error) {
-            console.log(error)
+            setLoading(true)
+            const response = await createNote(form); // ✅ await
+            toast.success(response);
+            setLoading(false)
+            setOpenModal((prev) => !prev)
+        } catch (error: any) {
+            console.error(error);
+            toast.error(error.message || "Failed to create note");
+        } finally {
+            setLoading(false)
         }
-    }
+    };
+
 
     return (
         <div className="absolute h-full top-0 bg-gray-50 flex items-center justify-center w-full z-10">
@@ -203,7 +212,7 @@ const NoteModal = ({ openModal, setOpenModal }: {
                 </Group>
 
                 <div className="flex items-center justify-end gap-2">
-                    <Button>Add Note</Button>
+                    {loading ? <Loader /> : <Button>Add Note</Button>}
                     <Button
                         type="reset"
                         className="bg-red-500"

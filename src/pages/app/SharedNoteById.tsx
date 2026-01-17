@@ -7,14 +7,13 @@ import { addCollaborator, fetchNoteByNoteId } from "../../api/note.api.ts";
 import type { CollaboratorForm, Note } from "../../types/note.types.ts";
 import toast from "react-hot-toast";
 import { connectSocket } from "../../socketio.ts";
-import { Plus } from "lucide-react";
 import Button from "../../components/ui/Button.tsx";
 import Loader from "../../components/ui/Loader.tsx";
 import { Label } from "../../components/ui/Label.tsx";
 import FormHeader from "../../components/ui/FormHeader.tsx";
 import FormTitle from "../../components/ui/FormTitle.tsx";
 
-const NoteById = () => {
+const SharedNoteById = () => {
     const { noteId } = useParams<{ noteId: string }>();
     const [noteData, setNoteData] = useState<Note | null>(null);
     const [loading, setLoading] = useState(true);
@@ -44,12 +43,7 @@ const NoteById = () => {
         <div className="relative w-full h-full shadow-input p-10">
             <div className="max-w-2xl mx-auto flex items-center justify-end gap-1">
                 <Avatar />
-                <button
-                    onClick={() => setOpenModal((prev) => !prev)}
-                    className="size-8 bg-neutral-200 text-primary  rounded-full flex items-center justify-center cursor-pointer hover:bg-neutral-300 active:scale-80 transition-all duration-200 ease-linear"
-                >
-                    <Plus />
-                </button>
+                
             </div>
 
             {
@@ -98,7 +92,7 @@ const NoteById = () => {
     );
 };
 
-export default NoteById;
+export default SharedNoteById;
 
 
 const Avatar = () => {
@@ -128,7 +122,7 @@ const AddColaboratorFormModal = ({ openModal, setOpenModal, noteId }: {
 
         try {
             setLoading(true)
-            const response = await addCollaborator(form); 
+            const response = await addCollaborator(form);
             toast.success(response);
             setLoading(false)
             setOpenModal((prev) => !prev)
