@@ -27,7 +27,7 @@ const registerUser = async (form: RegisterForm): Promise<AuthApiResponse> => {
         return response.data;
     } catch (error) {
         const err = error as AxiosError<any>;
-        throw new Error(err.response?.data?.message || "Login failed");
+        throw new Error(err.response?.data?.message || "Register failed");
     }
 }
 

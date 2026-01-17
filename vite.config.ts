@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:12345'
+        target: 'nipralonotesbackend-production.up.railway.app'
       }
     }
   }
