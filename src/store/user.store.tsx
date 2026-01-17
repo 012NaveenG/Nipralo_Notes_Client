@@ -1,4 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { logoutUser } from "../api/user.api";
+import type { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 // types/user.types.ts
 export interface User {
@@ -40,9 +43,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
     }, [user]);
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
+    const logout = async () => {
+        try {
+            setUser(null);
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            const message = await logoutUser()
+            toast.success(message)
+        } catch (error) {
+            const err = error as AxiosError<any>
+            toast.error(err.message)
+        }
     };
 
     return (

@@ -27,7 +27,7 @@ const Navbar = () => {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
 
-
+  
     const [mobileNavOpen, setMobileNavOpen] = useState<false | true>(false)
     return (
         <header className="w-full sm:max-w-6xl mx-auto">

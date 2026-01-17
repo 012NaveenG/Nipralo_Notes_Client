@@ -35,4 +35,9 @@ const registerUser = async (form: RegisterForm): Promise<AuthApiResponse> => {
     }
 }
 
-export { loginUser, registerUser };
+
+const logoutUser = async (): Promise<string> => {
+    const res = await axios.get(`${SERVER_URL}/api/v1/users/logout`)
+    return res.data?.message
+}
+export { loginUser, registerUser, logoutUser };

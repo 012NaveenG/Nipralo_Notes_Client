@@ -14,7 +14,6 @@ export const useSocket = () => {
         socket.connect();
 
         socket.on("connect", () => {
-            console.log("Socket connected:", socket.id);
             setConnected(true);
         });
 
