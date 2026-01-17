@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'nipralonotesbackend-production.up.railway.app'
+        // target: 'nipralonotesbackend-production.up.railway.app'
+        target: 'https://nipralo-notes-backend.onrender.com/'
       }
     }
   }
