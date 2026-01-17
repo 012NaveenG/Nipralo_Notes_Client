@@ -6,7 +6,10 @@ const loginUser = async (form: LoginForm): Promise<AuthApiResponse> => {
     try {
         const response = await axios.post<AuthApiResponse>(
             `${SERVER_URL}/api/v1/users/login`,
-            form
+            form,
+            {
+                withCredentials: true
+            }
         );
 
         return response.data;
