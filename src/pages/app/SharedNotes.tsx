@@ -37,7 +37,7 @@ const SharedNotes = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-3 gap-5 mt-10">
-                    {notes.length > 0 ? notes.map((note) => (
+                    {notes &&  notes.length > 0 ? notes.map((note) => (
                         <NoteCard
                             key={note.id}
                             className="relative group">

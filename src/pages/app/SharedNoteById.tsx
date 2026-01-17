@@ -93,7 +93,7 @@ const SharedNoteById = () => {
         <div className="relative w-full h-full shadow-input p-10">
             {/* Connected users */}
             <div className="max-w-2xl mx-auto flex justify-end gap-1 mb-3">
-                {connectedUsers.map((u) => (
+                {connectedUsers &&  connectedUsers.map((u) => (
                     <Avatar key={u.id} username={u.name} />
                 ))}
             </div>

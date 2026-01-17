@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { CollaboratorForm, Note } from "../types/note.types";
+import { SERVER_URL } from "../config/server.ts";
 
 interface ApiResponse<T> {
     statusCode: number;
@@ -16,7 +17,7 @@ interface NoteForm {
 
 const fetchNoteByUserId = async (): Promise<Note[]> => {
     const response = await axios.get<ApiResponse<Note[]>>(
-        "/api/v1/notes/get-user-notes"
+        `${SERVER_URL}/api/v1/notes/get-user-notes`
     );
 
     return response.data.data; // <-- IMPORTANT
@@ -24,7 +25,7 @@ const fetchNoteByUserId = async (): Promise<Note[]> => {
 
 const fetchNoteByNoteId = async (noteId: string): Promise<Note> => {
     const response = await axios.get<ApiResponse<Note>>(
-        `/api/v1/notes/get-note/${noteId}`
+        `${SERVER_URL}/api/v1/notes/get-note/${noteId}`
     );
 
     return response.data.data;
@@ -33,19 +34,19 @@ const fetchNoteByNoteId = async (noteId: string): Promise<Note> => {
 
 const createNote = async (data: NoteForm): Promise<string> => {
 
-    const response = await axios.post(`/api/v1/notes/`, data)
+    const response = await axios.post(`${SERVER_URL}/api/v1/notes/`, data)
     return response.data?.message
 }
 
 
 const addCollaborator = async (data: CollaboratorForm): Promise<string> => {
-    const response = await axios.post('/api/v1/notes/collaborate', data);
+    const response = await axios.post(`${SERVER_URL}/api/v1/notes/collaborate`, data);
     return response.data?.message
 }
 
 const fetchSharedNotes = async (): Promise<Note[]> => {
     const response = await axios.get<ApiResponse<Note[]>>(
-        "/api/v1/notes/shared-notes"
+        `${SERVER_URL}/api/v1/notes/shared-notes`
     );
 
     return response.data.data; // <-- IMPORTANT
@@ -57,13 +58,13 @@ const updateNote = async (
         content: string
     }
 ): Promise<Note> => {
-    const response = await axios.put(`/api/v1/notes/`, payload);
+    const response = await axios.put(`${SERVER_URL}/api/v1/notes/`, payload);
 
     return response.data.data;
 };
 
 const deleteNote = async (id: number): Promise<string> => {
-    const response = await axios.delete(`/api/v1/notes/${id}`);
+    const response = await axios.delete(`${SERVER_URL}/api/v1/notes/${id}`);
     return response.data?.message
 
 

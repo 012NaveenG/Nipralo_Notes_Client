@@ -1,10 +1,11 @@
 import axios, { AxiosError } from "axios";
 import type { LoginForm, RegisterForm } from "../types/user.types";
 import type { AuthApiResponse } from "../types/api.types";
+import { SERVER_URL } from "../config/server.ts";
 const loginUser = async (form: LoginForm): Promise<AuthApiResponse> => {
     try {
         const response = await axios.post<AuthApiResponse>(
-            "/api/v1/users/login",
+            `${SERVER_URL}/api/v1/users/login`,
             form
         );
 
@@ -20,7 +21,7 @@ const registerUser = async (form: RegisterForm): Promise<AuthApiResponse> => {
     try {
 
         const response = await axios.post<AuthApiResponse>(
-            "/api/v1/users/register",
+            `${SERVER_URL}/api/v1/users/register`,
             form
         );
 
