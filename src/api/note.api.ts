@@ -17,7 +17,7 @@ interface NoteForm {
 
 const fetchNoteByUserId = async (): Promise<Note[]> => {
     const response = await axios.get<ApiResponse<Note[]>>(
-        `${SERVER_URL}/api/v1/notes/get-user-notes`
+        `${SERVER_URL}/api/v1/notes/get-user-notes`, { withCredentials: true }
     );
 
     return response.data.data; // <-- IMPORTANT
@@ -25,7 +25,8 @@ const fetchNoteByUserId = async (): Promise<Note[]> => {
 
 const fetchNoteByNoteId = async (noteId: string): Promise<Note> => {
     const response = await axios.get<ApiResponse<Note>>(
-        `${SERVER_URL}/api/v1/notes/get-note/${noteId}`
+        `${SERVER_URL}/api/v1/notes/get-note/${noteId}`,
+        { withCredentials: true }
     );
 
     return response.data.data;
@@ -34,19 +35,19 @@ const fetchNoteByNoteId = async (noteId: string): Promise<Note> => {
 
 const createNote = async (data: NoteForm): Promise<string> => {
 
-    const response = await axios.post(`${SERVER_URL}/api/v1/notes/`, data)
+    const response = await axios.post(`${SERVER_URL}/api/v1/notes/`, data, { withCredentials: true })
     return response.data?.message
 }
 
 
 const addCollaborator = async (data: CollaboratorForm): Promise<string> => {
-    const response = await axios.post(`${SERVER_URL}/api/v1/notes/collaborate`, data);
+    const response = await axios.post(`${SERVER_URL}/api/v1/notes/collaborate`, data, { withCredentials: true });
     return response.data?.message
 }
 
 const fetchSharedNotes = async (): Promise<Note[]> => {
     const response = await axios.get<ApiResponse<Note[]>>(
-        `${SERVER_URL}/api/v1/notes/shared-notes`
+        `${SERVER_URL}/api/v1/notes/shared-notes`, { withCredentials: true }
     );
 
     return response.data.data; // <-- IMPORTANT
@@ -58,13 +59,13 @@ const updateNote = async (
         content: string
     }
 ): Promise<Note> => {
-    const response = await axios.put(`${SERVER_URL}/api/v1/notes/`, payload);
+    const response = await axios.put(`${SERVER_URL}/api/v1/notes/`, payload, { withCredentials: true });
 
     return response.data.data;
 };
 
 const deleteNote = async (id: number): Promise<string> => {
-    const response = await axios.delete(`${SERVER_URL}/api/v1/notes/${id}`);
+    const response = await axios.delete(`${SERVER_URL}/api/v1/notes/${id}`, { withCredentials: true });
     return response.data?.message
 
 
