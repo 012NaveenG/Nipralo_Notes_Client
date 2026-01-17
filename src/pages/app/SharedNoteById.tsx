@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { Group } from "../../components/ui/Group";
-import { Input } from "../../components/ui/Input";
-import Textarea from "../../components/ui/Textarea";
+import { Group } from "../../components/ui/Group.tsx";
+import { Input } from "../../components/ui/Input.tsx";
+import Textarea from "../../components/ui/Textarea.tsx";
 import { useEffect, useRef, useState } from "react";
-import { fetchNoteByNoteId, updateNote } from "../../api/note.api";
-import type { Note } from "../../types/note.types";
+import { fetchNoteByNoteId, updateNote } from "../../api/note.api.ts";
+import type { Note } from "../../types/note.types.ts";
 import toast from "react-hot-toast";
-import { useAuth } from "../../store/user.store";
-import { useSocket } from "../../socket/useSocket";
-import { debounce } from "../../utils/debounce";
+import { useAuth } from "../../store/user.store.ts";
+import { useSocket } from "../../socket/useSocket.ts";
+import { debounce } from "../../utils/debounce.ts";
 
 
 

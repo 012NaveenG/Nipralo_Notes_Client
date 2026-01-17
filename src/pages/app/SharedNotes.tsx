@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom"
-import type { Note } from "../../types/note.types";
+import type { Note } from "../../types/note.types.ts";
 import { cn } from "../../lib/utils";
-import { fetchSharedNotes } from "../../api/note.api";
+import { fetchSharedNotes } from "../../api/note.api.ts";
 
 const SharedNotes = () => {
     const [notes, setNotes] = useState<Note[]>([])
